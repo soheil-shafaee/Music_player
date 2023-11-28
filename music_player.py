@@ -12,6 +12,7 @@ class UI(QMainWindow):
         uic.loadUi("music_player.ui", self)
 
         # Define Our Widgets
+        self.defaultImage = self.findChild(QLabel, "defualtImage")
         self.musicName = self.findChild(QLabel, "musicName")
         self.artistName = self.findChild(QLabel, "artistName")
         self.musicTimer = self.findChild(QSlider, "musictimer")
@@ -26,7 +27,27 @@ class UI(QMainWindow):
         self.volumeLabel = self.findChild(QLabel, "volumeLabel")
         self.listButton = self.findChild(QPushButton, "listButton")
 
-        # 
+        # Put Icon and Image Into Music player App
+        self.setWindowIcon(QIcon("image/cassette.gif"))
+        self.djPix = QPixmap("image/dj-fotor-202311281363.png")
+        self.defaultImage.setPixmap(self.djPix)
+        self.playPauseButton.setIcon(QIcon("feather/play.svg"))
+        self.forwardButton.setIcon(QIcon("feather/skip-forward.svg"))
+        self.backwardButton.setIcon(QIcon("feather/skip-back.svg"))
+        self.shuffleButton.setIcon(QIcon("feather/shuffle.svg"))
+        self.repeatButton.setIcon(QIcon("feather/repeat.svg"))
+        self.listButton.setStyleSheet("""
+        QPushButton{
+            background-color: #F875AA;
+            border-radius: 10px;
+            color: #0000;
+            padding:10px;
+            }
+        QPushButton:hover{
+            icon-size: 32px;
+            image:url(:/icons/feather/chevrons-up.svg);
+            color: transparent;
+            } """)
 
         # Show The App
         self.show()
@@ -36,4 +57,3 @@ class UI(QMainWindow):
 app = QApplication(sys.argv)
 UIMainWindow = UI()
 app.exec_()
-
