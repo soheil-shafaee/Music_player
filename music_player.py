@@ -29,6 +29,7 @@ class UI(QMainWindow):
 
         # Put Icon and Image Into Music player App
         self.setWindowIcon(QIcon("image/cassette.gif"))
+        self.setFixedSize(413, 590)
         self.djPix = QPixmap("image/dj-fotor-202311281363.png")
         self.defaultImage.setPixmap(self.djPix)
         self.playPauseButton.setIcon(QIcon("feather/play.svg"))
@@ -36,18 +37,6 @@ class UI(QMainWindow):
         self.backwardButton.setIcon(QIcon("feather/skip-back.svg"))
         self.shuffleButton.setIcon(QIcon("feather/shuffle.svg"))
         self.repeatButton.setIcon(QIcon("feather/repeat.svg"))
-        self.listButton.setStyleSheet("""
-        QPushButton{
-            background-color: #F875AA;
-            border-radius: 10px;
-            color: #0000;
-            padding:10px;
-            }
-        QPushButton:hover{
-            icon-size: 32px;
-            image:url(:/icons/feather/chevrons-up.svg);
-            color: transparent;
-            } """)
 
         # Show The App
         self.show()
