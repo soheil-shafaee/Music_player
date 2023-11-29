@@ -45,20 +45,21 @@ class UI(QMainWindow):
         self.repeatButton.setIcon(QIcon("feather/repeat.svg"))
         self.listButton.setIcon(QIcon("feather/gitlab.svg"))
 
+        # Set Default Value For volume
+        self.volume.setValue(50)
+
         # Click The Button
         self.volume.valueChanged.connect(self.volumeChange)
         self.playButton.clicked.connect(self.play)
-
-        # Set Default Value For volume
-
-        # List Of Music
-        self.currentMusic = []
+        self.pauseButton.clicked.connect(self.pause)
+        self.stopButton.clicked.connect(self.stop)
+        self.forwardButton.clicked.connect(self.forward)
+        self.backwardButton.clicked.connect(self.back)
 
         # Media Player
         self.player = QMediaPlayer()
         self.playList = QMediaPlaylist(self.player)
         self.player.setPlaylist(self.playList)
-
 
         # Show The App
         self.show()
@@ -75,20 +76,39 @@ class UI(QMainWindow):
         file.setNameFilter("MP3 Files (*.mp3);; All Files (*)")
         file.setWindowTitle("Add Music")
         file.setFileMode(QFileDialog.ExistingFiles)
+        if self.playList.isEmpty():
+            if file.exec_():
+                choose_files = file.selectedFiles()
+                if choose_files:
+                    for file in choose_files:
+                        file_url = QUrl.fromLocalFile(file)
+                        content = QMediaContent(file_url)
+                        self.playList.addMedia(content)
 
-        if file.exec_():
-            choose_files = file.selectedFiles()
-            if choose_files:
-                for file in choose_files:
-                    file_url = QUrl.fromLocalFile(file)
-                    content = QMediaContent(file_url)
-                    self.playList.addMedia(content)
+                    self.player.play()
+                    song_info = self.player.currentMedia().canonicalUrl().fileName().split("-")
+                    if len(song_info) == 2:
+                        self.musicName.setText(song_info[1].strip())
+                        self.artistName.setText(song_info[0].strip())
+        else:
+            self.player.play()
 
-                self.player.play()
-                song_info = self.player.currentMedia().canonicalUrl().fileName().split("-")
-                if len(song_info) == 2:
-                    self.musicName.setText(song_info[1].strip())
-                    self.artistName.setText(song_info[0].strip())
+    # Define Function For pause The music
+    def pause(self):
+        self.player.pause()
+
+    # Define Function For Stop The music
+    def stop(self):
+        self.player.stop()
+
+    # Define Function For Forward The music
+    def forward(self):
+        self.playList.next()
+        self.songInfo = self.player.currentMedia().canonicalUrl().fileName().split("-")
+        if len(self.songInfo) == 2:
+            self.musicName.setText(self.songInfo[1].strip())
+            self.artistName.setText(self.songInfo[0].strip())
+
 
 # Initialize The App
 app = QApplication(sys.argv)
