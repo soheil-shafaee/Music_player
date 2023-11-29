@@ -1,10 +1,9 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QSlider, QPushButton, QDial
+from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QSlider, QPushButton, QDial, QFileDialog
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtMultimedia import QMediaPlayer
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
+from PyQt5.QtCore import QUrl
 from PyQt5 import uic
 import sys
-
-from music_list import musicList
 
 
 class UI(QMainWindow):
@@ -34,7 +33,7 @@ class UI(QMainWindow):
 
         # Put Icon and Image Into Music player App
         self.setWindowIcon(QIcon("image/cassette.gif"))
-        self.setFixedSize(413, 590)
+        self.setFixedSize(413, 600)
         self.djPix = QPixmap("image/dj-fotor-202311281363.png")
         self.defaultImage.setPixmap(self.djPix)
         self.playButton.setIcon(QIcon("feather/play.svg"))
@@ -44,24 +43,52 @@ class UI(QMainWindow):
         self.backwardButton.setIcon(QIcon("feather/skip-back.svg"))
         self.shuffleButton.setIcon(QIcon("feather/shuffle.svg"))
         self.repeatButton.setIcon(QIcon("feather/repeat.svg"))
+        self.listButton.setIcon(QIcon("feather/gitlab.svg"))
 
         # Click The Button
-        self.listButton.clicked.connect(self.showList)
         self.volume.valueChanged.connect(self.volumeChange)
+        self.playButton.clicked.connect(self.play)
+
+        # Set Default Value For volume
+
+        # List Of Music
+        self.currentMusic = []
+
+        # Media Player
+        self.player = QMediaPlayer()
+        self.playList = QMediaPlaylist(self.player)
+        self.player.setPlaylist(self.playList)
+
 
         # Show The App
         self.show()
-
-    # Define The Function For Show The List
-    def showList(self):
-        self.ui = musicList()
-        self.ui.show()
 
     # Define Function To Change Volume
     def volumeChange(self):
         valueVolume = self.volume.value()
         self.volumeLabel.setText(str(valueVolume))
+        self.player.setVolume(valueVolume)
 
+    # Define The Play Function:
+    def play(self):
+        file = QFileDialog(self)
+        file.setNameFilter("MP3 Files (*.mp3);; All Files (*)")
+        file.setWindowTitle("Add Music")
+        file.setFileMode(QFileDialog.ExistingFiles)
+
+        if file.exec_():
+            choose_files = file.selectedFiles()
+            if choose_files:
+                for file in choose_files:
+                    file_url = QUrl.fromLocalFile(file)
+                    content = QMediaContent(file_url)
+                    self.playList.addMedia(content)
+
+                self.player.play()
+                song_info = self.player.currentMedia().canonicalUrl().fileName().split("-")
+                if len(song_info) == 2:
+                    self.musicName.setText(song_info[1].strip())
+                    self.artistName.setText(song_info[0].strip())
 
 # Initialize The App
 app = QApplication(sys.argv)
