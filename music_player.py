@@ -1,7 +1,10 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QSlider, QPushButton, QDial
 from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5 import uic
 import sys
+
+from music_list import musicList
 
 
 class UI(QMainWindow):
@@ -42,8 +45,22 @@ class UI(QMainWindow):
         self.shuffleButton.setIcon(QIcon("feather/shuffle.svg"))
         self.repeatButton.setIcon(QIcon("feather/repeat.svg"))
 
+        # Click The Button
+        self.listButton.clicked.connect(self.showList)
+        self.volume.valueChanged.connect(self.volumeChange)
+
         # Show The App
         self.show()
+
+    # Define The Function For Show The List
+    def showList(self):
+        self.ui = musicList()
+        self.ui.show()
+
+    # Define Function To Change Volume
+    def volumeChange(self):
+        valueVolume = self.volume.value()
+        self.volumeLabel.setText(str(valueVolume))
 
 
 # Initialize The App
