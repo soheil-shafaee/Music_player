@@ -55,6 +55,7 @@ class UI(QMainWindow):
         self.stopButton.clicked.connect(self.stop)
         self.forwardButton.clicked.connect(self.forward)
         self.backwardButton.clicked.connect(self.back)
+        self.shuffleButton.clicked.connect(self.shuffle)
 
         # Media Player
         self.player = QMediaPlayer()
@@ -113,6 +114,11 @@ class UI(QMainWindow):
     # Define Function for Back To the Previous Music
     def back(self):
         self.playList.previous()
+        self.changeName()
+
+    # Define Function For Shuffle The List of Music
+    def shuffle(self):
+        self.playList.shuffle()
         self.changeName()
 
 
