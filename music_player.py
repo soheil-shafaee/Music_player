@@ -86,12 +86,16 @@ class UI(QMainWindow):
                         self.playList.addMedia(content)
 
                     self.player.play()
-                    song_info = self.player.currentMedia().canonicalUrl().fileName().split("-")
-                    if len(song_info) == 2:
-                        self.musicName.setText(song_info[1].strip())
-                        self.artistName.setText(song_info[0].strip())
+                    self.changeName()
         else:
             self.player.play()
+
+    # Define Function To Change The name and artist music
+    def changeName(self):
+        songInfo = self.player.currentMedia().canonicalUrl().fileName().split("-")
+        if len(songInfo) == 2:
+            self.musicName.setText(songInfo[1])
+            self.artistName.setText(songInfo[0])
 
     # Define Function For pause The music
     def pause(self):
@@ -104,10 +108,12 @@ class UI(QMainWindow):
     # Define Function For Forward The music
     def forward(self):
         self.playList.next()
-        self.songInfo = self.player.currentMedia().canonicalUrl().fileName().split("-")
-        if len(self.songInfo) == 2:
-            self.musicName.setText(self.songInfo[1].strip())
-            self.artistName.setText(self.songInfo[0].strip())
+        self.changeName()
+
+    # Define Function for Back To the Previous Music
+    def back(self):
+        self.playList.previous()
+        self.changeName()
 
 
 # Initialize The App
