@@ -14,6 +14,17 @@ class musicList(QMainWindow):
         self.setFixedSize(412, 436)
 
         # Define Our Widgets
+        self.openButton = self.findChild(QPushButton, "openButton")
+        self.saveButton = self.findChild(QPushButton, "okyButton")
+        self.cancelButton = self.findChild(QPushButton, "cancelButton")
+
+        # Click the Button
+        self.openButton.clicked.connect(self.openFile)
+        self.saveButton.clicked.connect(self.goPlay)
+        self.cancelButton.clicked.connect(self.close)
+
+
+    
 
         # Show The App
         self.show()
