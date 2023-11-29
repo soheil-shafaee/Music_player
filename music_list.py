@@ -10,6 +10,9 @@ class musicList(QMainWindow):
         # Load The File
         uic.loadUi("music_list.ui", self)
 
+        # Fix The Size of Window
+        self.setFixedSize(412, 436)
+
         # Define Our Widgets
 
         # Show The App
