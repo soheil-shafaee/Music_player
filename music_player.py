@@ -1,7 +1,9 @@
+import time
+
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QSlider, QPushButton, QDial, QFileDialog
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QTimer
 from PyQt5 import uic
 import sys
 
@@ -48,6 +50,9 @@ class UI(QMainWindow):
         # Set Default Value For volume
         self.volume.setValue(50)
 
+        # Set Default Color For button
+        self.repeatButtonPink = True
+
         # Click The Button
         self.volume.valueChanged.connect(self.volumeChange)
         self.playButton.clicked.connect(self.play)
@@ -56,14 +61,35 @@ class UI(QMainWindow):
         self.forwardButton.clicked.connect(self.forward)
         self.backwardButton.clicked.connect(self.back)
         self.shuffleButton.clicked.connect(self.shuffle)
+        self.repeatButton.clicked.connect(self.repeat)
+        self.musicTimer.sliderMoved[int].connect(lambda: self.player.setPosition(self.musicTimer.value()))
 
         # Media Player
         self.player = QMediaPlayer()
         self.playList = QMediaPlaylist(self.player)
         self.player.setPlaylist(self.playList)
 
+        # Timer For Slider
+        self.timer = QTimer()
+        self.timer.start(1000)
+        self.timer.timeout.connect(self.slider_move)
+
         # Show The App
         self.show()
+
+    # Define
+    def slider_move(self):
+        if self.player.state() == QMediaPlayer.PlayingState:
+            self.musicTimer.setMinimum(0)
+            self.musicTimer.setMaximum(self.player.duration())
+            sliderPosition = self.player.position()
+            self.musicTimer.setValue(sliderPosition)
+
+            current_time = time.strftime("%M:%S", time.gmtime((self.player.position() / 1000)))
+            print(current_time)
+            duration_time = time.strftime("%M:%S", time.gmtime((self.player.duration() / 1000)))
+            self.startCount.setText(f"{current_time}")
+            self.endCount.setText(f"{duration_time}")
 
     # Define Function To Change Volume
     def volumeChange(self):
@@ -88,6 +114,7 @@ class UI(QMainWindow):
 
                     self.player.play()
                     self.changeName()
+                    self.slider_move()
         else:
             self.player.play()
 
@@ -120,6 +147,32 @@ class UI(QMainWindow):
     def shuffle(self):
         self.playList.shuffle()
         self.changeName()
+
+    # Define Function For Repeat one Music
+    def repeat(self):
+        if self.repeatButtonPink:
+            self.repeatButton.setStyleSheet("""QPushButton{
+                border:2px solid #F9F9F9;
+                border-radius: 20px;
+                padding:50px;
+                background-color: #FFD95A;
+            }""")
+
+        else:
+            self.repeatButton.setStyleSheet("""QPushButton{
+                    border:none;
+            }
+
+            QPushButton:hover{
+            border:2px solid #F9F9F9;
+            border-radius: 20px;
+            padding:50px;
+            background-color: #F875AA;
+            }""")
+            self.playList.currentMedia()
+        self.repeatButtonPink = not self.repeatButtonPink
+
+        print(self.repeatButtonPink)
 
 
 # Initialize The App
