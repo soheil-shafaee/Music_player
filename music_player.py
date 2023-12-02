@@ -39,8 +39,8 @@ class UI(QMainWindow):
         self.djPix = QPixmap("image/dj-fotor-202311281363.png")
         self.defaultImage.setPixmap(self.djPix)
         self.playButton.setIcon(QIcon("feather/play.svg"))
-        self.pauseButton.setIcon(QIcon("feather/pause-circle.svg"))
-        self.stopButton.setIcon(QIcon("feather/stop-circle.svg"))
+        self.pauseButton.setIcon(QIcon("feather/pause.svg"))
+        self.stopButton.setIcon(QIcon("image/stop-button.png"))
         self.forwardButton.setIcon(QIcon("feather/skip-forward.svg"))
         self.backwardButton.setIcon(QIcon("feather/skip-back.svg"))
         self.shuffleButton.setIcon(QIcon("feather/shuffle.svg"))
@@ -77,7 +77,7 @@ class UI(QMainWindow):
         # Show The App
         self.show()
 
-    # Define
+    # Define Function For Time to the song
     def slider_move(self):
         if self.player.state() == QMediaPlayer.PlayingState:
             self.musicTimer.setMinimum(0)
@@ -86,7 +86,6 @@ class UI(QMainWindow):
             self.musicTimer.setValue(sliderPosition)
 
             current_time = time.strftime("%M:%S", time.gmtime((self.player.position() / 1000)))
-            print(current_time)
             duration_time = time.strftime("%M:%S", time.gmtime((self.player.duration() / 1000)))
             self.startCount.setText(f"{current_time}")
             self.endCount.setText(f"{duration_time}")
@@ -157,6 +156,7 @@ class UI(QMainWindow):
                 padding:50px;
                 background-color: #FFD95A;
             }""")
+            self.playList.setPlaybackMode(QMediaPlaylist.CurrentItemInLoop)
 
         else:
             self.repeatButton.setStyleSheet("""QPushButton{
@@ -169,10 +169,9 @@ class UI(QMainWindow):
             padding:50px;
             background-color: #F875AA;
             }""")
-            self.playList.currentMedia()
-        self.repeatButtonPink = not self.repeatButtonPink
+            self.playList.setPlaybackMode(QMediaPlaylist.Sequential)
 
-        print(self.repeatButtonPink)
+        self.repeatButtonPink = not self.repeatButtonPink
 
 
 # Initialize The App
