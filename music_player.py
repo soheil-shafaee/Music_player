@@ -1,11 +1,10 @@
-import time
-
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QSlider, QPushButton, QDial, QFileDialog
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QUrl, QTimer
 from PyQt5 import uic
 import sys
+import time
 
 
 class UI(QMainWindow):
