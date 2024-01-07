@@ -23,7 +23,7 @@ The Music Player is a simple desktop application built using PyQt5, a Python lib
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/music-player.git
+    git clone https://github.com/soheil-shafaee/Music_player.git
     cd music-player
     ```
 
