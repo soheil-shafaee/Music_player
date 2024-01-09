@@ -38,7 +38,7 @@ The Music Player is a simple desktop application built using PyQt5, a Python lib
 Run the music player application:
 
 ```bash
-python main.py
+python music_player.py
 ```
 ## Usage Video
 
